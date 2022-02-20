@@ -51,8 +51,7 @@ jobs:
           echo ${{ github.event }}
           echo ${{ github.event_name }}
           echo ${{ github.run_id }}
-          echo {{ github.run_number }}
-          echo $GITHUB_RUN_NUMBER"echo 
+          echo ${{ github.run_number }}
           echo ${{ github.server_url }}
           echo ${{ github.repository }}
           echo ${{ env.URL_GITACTION }}
