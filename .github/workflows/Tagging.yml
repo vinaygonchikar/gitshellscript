@@ -27,7 +27,7 @@ jobs:
 
       - name: store tag name
         run: |
-          echo "TAG_NAME=$("${{ github.event.head_commit.message }}" | cut -d':' -f1)" >> $GITHUB_ENV
+          echo "TAG_NAME=$(echo "${{ github.event.head_commit.message }}" | cut -d':' -f1)" >> $GITHUB_ENV
         
       - name: verify the valid commit message received or not for tagging 
         run: |
