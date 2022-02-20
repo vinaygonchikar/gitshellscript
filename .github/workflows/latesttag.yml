@@ -12,5 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      # - name: display leatet tag
+      #   run: git describe --tags --abbrev=0
+
       - name: display leatet tag
-        run: git describe --tags --abbrev=0
+        run: |
+          git tag
+          git show-ref --tags
