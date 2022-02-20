@@ -9,9 +9,12 @@ on:
         description: 'enter image tag'     
         required: true
         default: 'v2.0.1'
-
   push:
     tags:        
+      - v*
+      - V*
+
+
 
 jobs:
  prod-CI:
