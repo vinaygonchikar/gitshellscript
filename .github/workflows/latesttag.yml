@@ -1,0 +1,16 @@
+
+name: latestag
+
+# manully trigger the job 
+
+on:
+  push:
+
+
+jobs:  
+ latestag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: display leatet tag
+        run: git describe --tags --abbrev=0
