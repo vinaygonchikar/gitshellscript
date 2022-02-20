@@ -9,6 +9,11 @@ on:
         description: 'enter image tag'     
         required: true
         default: 'v2.0.1'
+
+  workflow_run:
+    workflows: ["Tagging"]
+    types:
+      - completed        
   push:
     tags:        
       - v*
