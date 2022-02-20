@@ -3,16 +3,16 @@ name: prod-CI
 # manully trigger the job 
 
 on:
-   workflow_dispatch:
-     inputs:
-       image-tag:
-         description: 'enter image tag'     
-         required: true
-         default: 'v2.0.1'
-   push:
-     tags:        
-       - 'v*'
-       - 'V*' 
+  workflow_dispatch:
+    inputs:
+      image-tag:
+        description: 'enter image tag'     
+        required: true
+        default: 'v2.0.1'
+  push:
+    tags:        
+      - 'v*'
+      - 'V*' 
 jobs:
  prod-CI:
     runs-on: ubuntu-latest
