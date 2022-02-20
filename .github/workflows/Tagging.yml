@@ -27,7 +27,16 @@ jobs:
 
       - name: store tag name
         run: |
-          echo "TAG_NAME=$(echo "${{ github.event.head_commit.message }}" | cut -d':' -f1)" >> $GITHUB_ENV
+          IMAGE_TAG_NAME=$(echo "${{ github.event.head_commit.message }}" | cut -d':' -f1)
+          echo "TAG_NAME=$IMAGE_TAG_NAME" >> $GITHUB_ENV
+
+
+
+# - name: extract version number
+#         run: |
+#           BUILD_VERSION=$(awk -F \" '$2 == "version" {print $4}' package.json)
+#           echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
+
         
       - name: verify the valid commit message received or not for tagging 
         run: |
