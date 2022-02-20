@@ -21,6 +21,9 @@ jobs:
     steps:
 
       - uses: actions/checkout@v2
+      
+      - name: checkout to master 
+        run: git checkout master
         
       - name: display commit message
         run: echo "${{ github.event.head_commit.message }}"
