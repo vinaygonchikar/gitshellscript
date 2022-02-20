@@ -9,10 +9,10 @@ on:
   push:
     branches: 
       - 'master'
-    # paths-ignore:
-    #  - '.github/**'
-    #  - '.gitignore'
-    #  - '**.md'
+    paths-ignore:
+     - '.github/**'
+     - '.gitignore'
+     - '**.md'
 jobs:
   Automatic-tag:
     if: |
