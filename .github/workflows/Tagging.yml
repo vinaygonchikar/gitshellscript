@@ -9,10 +9,10 @@ on:
   push:
     branches: 
       - 'master'
-    paths-ignore:
-     - '.github/**'
-     - '.gitignore'
-     - '**.md'
+    # paths-ignore:
+    #  - '.github/**'
+    #  - '.gitignore'
+    #  - '**.md'
 jobs:
   Automatic-tag:
     if: |
@@ -35,7 +35,7 @@ jobs:
 # - name: extract version number
 #         run: |
 #           BUILD_VERSION=$(awk -F \" '$2 == "version" {print $4}' package.json)
-#           echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV
+#           echo "BUILD_VERSION=$BUILD_VERSION" >> $GITHUB_ENV dfgdf
 
         
       - name: verify the valid commit message received or not for tagging 
