@@ -9,10 +9,11 @@ on:
         description: 'enter image tag'     
         required: true
         default: 'v2.0.1'
+
   push:
     tags:        
-      - 'v*'
-      - 'V*' 
+      - v*.*.*
+      - V*.*.*
 jobs:
  prod-CI:
     runs-on: ubuntu-latest
