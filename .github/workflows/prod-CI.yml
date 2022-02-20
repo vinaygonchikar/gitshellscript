@@ -33,26 +33,28 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
 
-      - name: display leatet tag
-        run: git describe --tags --abbrev=0
+      # - name: display leatet tag
+      #   run: git describe --tags --abbrev=0
 
 
-      - name: display all environmental varaibles
-        shell: "bash"
-        run: |-
-          if [[ ${{ github.event_name }} == workflow_run && ${{ github.ref_name }} == master && ${{ github.ref_type }} == branch ]]; then echo "IMAGE_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV; fi
+      # - name: display all environmental varaibles
+      #   shell: "bash"
+      #   run: |-
+      #     if [[ ${{ github.event_name }} == workflow_run && ${{ github.ref_name }} == master && ${{ github.ref_type }} == branch ]]; then echo "IMAGE_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV; fi
 
 
       - name: display all environmental varaibles
         run: |
-          echo "${{ env.IMAGE_TAG }}"
+          # echo "${{ env.IMAGE_TAG }}"
           echo ${{ github.ref_type }} 
           echo ${{ github.ref_name }}
           echo ${{ github.event }}
           echo ${{ github.event_name }}
-          echo "${{ github.run_id }}"
-          echo "{{ github.run_number }}"
-          echo "$GITHUB_RUN_NUMBER"echo "${{ github.server_url }}/${{ github.repository }}"
+          echo ${{ github.run_id }}
+          echo {{ github.run_number }}
+          echo $GITHUB_RUN_NUMBER"echo 
+          echo ${{ github.server_url }}
+          echo ${{ github.repository }}
           echo ${{ env.URL_GITACTION }}
           echo ${GITHUB_REF##*/}
           echo ${{ github.actor }} 
