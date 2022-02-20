@@ -1,0 +1,63 @@
+name: Tagging
+on:
+  workflow_dispatch:
+    inputs:
+      tagname:
+        description: 'enter the tag name (v*.*.*)'     
+        required: true
+        default: 'warning' 
+  push:
+    branches: 
+      - 'master'
+    paths-ignore:
+     - '.github/**'
+     - '.gitignore'
+     - '**.md'
+jobs:
+  Automatic-tag:
+    if: |
+      github.ref_name == 'master' && github.ref_type == 'branch' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+        
+      - name: display commit message
+        run: echo "${{ github.event.head_commit.message }}"
+
+      - name: store tag name
+        run: echo "TAG_NAME=$(echo "${{ github.event.head_commit.message }}" | cut -d':' -f1)" >> $GITHUB_ENV
+        
+      - name: verify the valid commit message received or not for tagging 
+        run: |
+          if [[ ${{ env.TAG_NAME }} == v*.*.* ]] || [[ ${{ env.TAG_NAME }} == V*.*.* ]]; then exit 0; else exit 1; fi
+        
+      - name: tag the master branch
+        run: git tag "${{ env.TAG_NAME }}"     
+        
+      - name: push the tag to remote
+        run: git push origin "${{ env.TAG_NAME }}"     
+
+  manual-tag:
+    if: |
+      github.ref_name == 'master' && github.ref_type == 'branch' && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+      
+      - name: Display the tag name received 
+        run: echo "${{ github.event.inputs.tagname }}"
+      
+        
+      - name: verify the valid commit message received or not for tagging 
+        run: |
+          if [[ ${{ github.event.inputs.tagname }} == v*.*.* ]] || [[ ${{ github.event.inputs.tagname }} == V*.*.* ]]; then exit 0; else exit 1; fi
+        
+      - name: tag the master branch
+        run: git tag "${{ github.event.inputs.tagname }}"     
+        
+      - name: push the tag to remote
+        run: git push origin "${{ github.event.inputs.tagname }}" 
+        
+        
