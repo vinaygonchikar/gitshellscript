@@ -12,8 +12,7 @@ on:
 
   push:
     tags:        
-      - v*.*.*
-      - V*.*.*
+
 jobs:
  prod-CI:
     runs-on: ubuntu-latest
