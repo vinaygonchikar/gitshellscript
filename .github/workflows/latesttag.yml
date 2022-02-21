@@ -12,10 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # - name: display leatet tag
-      #   run: git describe --tags --abbrev=0
+
+      - name: store tag
+        run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
 
       - name: display leatet tag
-        run: |
-          git tag
-          git show-ref --tags
+        run: echo "${{ env.GIT_TAG }}"
