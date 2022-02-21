@@ -9,13 +9,13 @@ on:
 
 jobs:  
  job1:
-    runs-on: ubuntu-latest
-    outputs:
-      output1: ${{ steps.step1.outputs.test }}
-    steps:
-      - uses: actions/checkout@v2
-      - id: step1
-        run: echo "::set-output name=test::hello sir"
+   runs-on: ubuntu-latest
+   outputs:
+     output1: ${{ steps.step1.outputs.test }}
+   steps:
+     - uses: actions/checkout@v2
+     - id: step1
+       run: echo "::set-output name=test::hello sir"
 
       # - name: store tag
       #   run: echo "::set-output name=test::hello"
