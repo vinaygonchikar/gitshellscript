@@ -1,0 +1,69 @@
+#!/bin/bash
+set -x
+REPO_NAME=vue-cli-plugin-express
+NO_TAGS=$(ls --format=single-column --sort=version| wc -l)
+echo "total number of tag is  is '$NO_TAGS"
+COUNT=1
+while [ $COUNT -le $NO_TAGS ]     
+do
+	echo "Welcone $COUNT st TAG"  
+    TAG_NAME=$(ls --format=single-column --sort=version | head -$COUNT | tail -1) 
+    tar zxvf $TAG_NAME
+    cd ./package
+    find . -type f -exec sed -i 's/techshed/redbeacon/g' {} +
+
+    SCRIPTS_CHECK=$(cat package.json | grep scripts)
+    SCRIPTS_STATUS=$(echo $?)
+    if [ $SCRIPTS_STATUS == 0 ]
+    then
+        PUBLISH_LINE_NO=$(cat -n package.json | grep { | awk '{print $1;}' | head -2 | tail -1)
+        PUBLISH_LAST_NO=$(cat -n package.json | grep } | awk '{print $1;}' | head -1)
+        sed -i "${PUBLISH_LINE_NO},${PUBLISH_LAST_NO}d" package.json
+    fi
+
+
+    PUBLISH_CHECK=$(cat package.json | grep publishConfig)
+    PUBLISH_STATUS=$(echo $?)    
+    
+        
+    if [ $PUBLISH_STATUS == 0 ]
+    then
+        PUBLISH_LINE_NO=$(cat -n package.json | grep publishConfig | awk '{print $1;}' | head -1)
+        PUBLISH_LAST_NO="$((PUBLISH_LINE_NO+2))"
+        sed -i "${PUBLISH_LINE_NO},${PUBLISH_LAST_NO}d" package.json
+    fi
+##a find & delete repository 
+    # REPOSITORY_CHECK=$(cat package.json | grep repository)
+    # REPOSITORY_STATUS=$(echo $?)
+    # if [ $REPOSITORY_STATUS == 0 ]
+    # then
+    #     REPOSITORY_LINE_NO=$(cat -n package.json | grep repository | awk '{print $1;}' | head -1)
+    #     REPOSITORY_LAST_NO="$((REPOSITORY_LINE_NO+3))"
+    #     sed -i "${REPOSITORY_LINE_NO},${REPOSITORY_LAST_NO}d" package.json        
+    #     # sed -i "${REPOSITORY_LINE_NO}d" package.json  
+    # fi     
+##a find first } and add latest publish & repository 
+    LINE_NO_TOPASTE=$(cat -n package.json | grep devDependencies | awk '{print $1;}' | head -1)
+    LINE_NO_TOPASTE=$(($LINE_NO_TOPASTE - 1))
+    sed -i "${LINE_NO_TOPASTE} a\  }," package.json
+    sed -i "${LINE_NO_TOPASTE} a\    \"url\": \"https://github.com/redbeacon/$REPO_NAME.git\"" package.json
+    sed -i "${LINE_NO_TOPASTE} a\    \"type\": \"git\"," package.json
+    sed -i "${LINE_NO_TOPASTE} a\  \"repository\": {" package.json
+    sed -i "${LINE_NO_TOPASTE} a\  }," package.json
+    sed -i "${LINE_NO_TOPASTE} a\    \"registry\": \"https://npm.pkg.github.com/\"" package.json
+    sed -i "${LINE_NO_TOPASTE} a\  \"publishConfig\": {" package.json
+    sed -i '/"private": true,/Id' package.json
+    rm yarn.lock
+    rm package-lock.json    
+    cd ..
+    echo "@redbeacon:registry=https://npm.pkg.github.com" >> .npmrc
+    echo "loglevel = \"warn\"" >> .npmrc
+    echo "progress = true" >> .npmrc
+    cp ./package/package.json ./
+    yarn publish package/ --non-interactive
+    rm -r -v package
+    rm package.json
+    rm .npmrc
+	(( COUNT++ ))
+    sleep 1
+done
