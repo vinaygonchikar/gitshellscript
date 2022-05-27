@@ -1,0 +1,71 @@
+#!/bin/bash
+set -x
+REPO_NAME=design-kit
+git fetch --all --tags
+NO_TAGS=$(git tag | wc -l)
+echo "total number of tag is  is '$NO_TAGS"
+##a first two branch repitative thats why starting from line 3
+COUNT=9
+while [ $COUNT -le $NO_TAGS ]     
+do
+	echo "Welcone $COUNT st TAG"  
+    TAG_NAME=$(git tag | cut -d'/' -f2 | head -$COUNT | tail -1) 
+    git checkout $TAG_NAME
+##a find & delete publisconfig line & two more lines with it 
+    PUBLISH_CHECK=$(cat package.json | grep publishConfig)
+    PUBLISH_STATUS=$(echo $?)
+    if [ $PUBLISH_STATUS == 0 ]
+    then
+        PUBLISH_LINE_NO=$(cat -n package.json | grep publishConfig | awk '{print $1;}' | head -1)
+        PUBLISH_LAST_NO="$((PUBLISH_LINE_NO+2))"
+        sed -i "${PUBLISH_LINE_NO},${PUBLISH_LAST_NO}d" package.json
+    fi
+##a find & delete repository 
+    REPOSITORY_CHECK=$(cat package.json | grep repository)
+    REPOSITORY_STATUS=$(echo $?)
+    if [ $REPOSITORY_STATUS == 0 ]
+    then
+        REPOSITORY_LINE_NO=$(cat -n package.json | grep repository | awk '{print $1;}' | head -1)
+        sed -i "${REPOSITORY_LINE_NO}d" package.json  
+    fi    
+##a find techshed and replace to redbeacon 
+    sed -i 's/techshed/redbeacon/g' package.json
+##a find first } and add latest publish & repository 
+    LINE_NO_TOPASTE=$(cat -n package.json | grep bin | awk '{print $1;}' | head -1)
+    LINE_NO_TOPASTE=$(($LINE_NO_TOPASTE - 1))
+    sed -i "${LINE_NO_TOPASTE} a\  }," package.json
+    sed -i "${LINE_NO_TOPASTE} a\    \"url\": \"https://github.com/redbeacon/$REPO_NAME.git\"" package.json
+    sed -i "${LINE_NO_TOPASTE} a\    \"type\": \"git\"," package.json
+    sed -i "${LINE_NO_TOPASTE} a\  \"repository\": {" package.json
+    sed -i "${LINE_NO_TOPASTE} a\  }," package.json
+    sed -i "${LINE_NO_TOPASTE} a\    \"registry\": \"https://npm.pkg.github.com/\"" package.json
+    sed -i "${LINE_NO_TOPASTE} a\  \"publishConfig\": {" package.json
+    rm .npmrc
+    echo "@redbeacon:registry=https://npm.pkg.github.com" >> .npmrc
+    echo "loglevel = \"warn\"" >> .npmrc
+    echo "progress = true" >> .npmrc
+    rm yarn.lock
+    rm package-lock.json
+    yarn install
+
+    FIX_ERROR=$(cat -n ./node_modules/@types/node/index.d.ts | grep "/// <reference path=\"base.d.ts\" />")
+    FIX_ERROR_STATUS=$(echo $?)
+    if [ $FIX_ERROR_STATUS == 0 ]
+    then
+        FIX_ERROR_LINE_NO=$(cat -n ./node_modules/@types/node/index.d.ts | grep "/// <reference path=\"base.d.ts\" />" | awk '{print $1;}' | head -1)
+        sed -i "${FIX_ERROR_LINE_NO}d" ./node_modules/@types/node/index.d.ts  
+    fi   
+
+
+    
+    sed -i '/"private": true,/Id' package.json
+    yarn build
+    # yarn publish --non-interactive
+    yarn publish dist/ --non-interactive
+    git stash
+	(( COUNT++ ))
+    sleep 10
+done
+
+
+
