@@ -19,8 +19,6 @@ jobs:
           cd ..
           echo "storing shell script path"
           echo "SHELL_PATH=$(pwd)" >> $GITHUB_ENV
-          touch auto-merge-from-master-to-feature.sh
-          chmod +x auto-merge-from-master-to-feature.sh
           cat <<EOF > auto-merge-from-master-to-feature.sh
           HELLO
           HELLO
