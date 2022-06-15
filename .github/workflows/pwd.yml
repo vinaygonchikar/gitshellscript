@@ -1,0 +1,20 @@
+name: Merge-Master-to-Feature
+on:
+  push:
+    branches:    
+      - '**'        # matches every branch
+jobs:
+  Merge:
+    runs-on: ubuntu-latest 
+    steps:
+#fetch the code     
+      - uses: actions/checkout@v2
+      
+      - name: Who started this workflow
+        run: |
+          pwd
+          
+      - name: Who started this workflow
+        run: |
+          cd ..
+          pwd
