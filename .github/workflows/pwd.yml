@@ -19,7 +19,7 @@ jobs:
           cd ..
           echo "storing shell script path"
           echo "SHELL_PATH=$(pwd)" >> $GITHUB_ENV
-          cat >> test <<HERE
+          cat >> auto-merge-from-master-to-feature.sh <<HERE
           Hello world HERE <-- Not by itself on a separate line -> not considered end of string
           This is a test
           HERE <-- Leading space, so not considered end of string
