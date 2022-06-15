@@ -13,8 +13,11 @@ jobs:
       - name: Who started this workflow
         run: |
           pwd
+          ls -la
           
       - name: Who started this workflow
         run: |
           cd ..
           pwd
+          ls -la
+          
