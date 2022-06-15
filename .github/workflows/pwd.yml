@@ -4,20 +4,30 @@ on:
     branches:    
       - '**'        # matches every branch
 jobs:
-  Merge:
+  Merge-Master-to-Feature:
     runs-on: ubuntu-latest 
     steps:
 #fetch the code     
       - uses: actions/checkout@v2
-      
+
       - name: Who started this workflow
-        run: |
-          pwd
-          ls -la
-          
-      - name: Who started this workflow
-        run: |
+        run: echo "This workflow is started by ${{ github.actor }}" 
+    
+      - name: Store shell script 
+        shell: bash
+        run: |-
           cd ..
-          pwd
-          ls -la
-          
+          echo "storing shell script path"
+          echo "SHELL_PATH=$(pwd)" >> $GITHUB_ENV
+          touch auto-merge-from-master-to-feature.sh
+          chmod +x auto-merge-from-master-to-feature.sh
+          cat <<EOF > auto-merge-from-master-to-feature.sh
+          HELLO
+          HELLO
+          EOF 
+
+      - name: Store shell script 
+        shell: bash
+        run: |-
+          cd ..
+          cat auto-merge-from-master-to-feature.sh     
